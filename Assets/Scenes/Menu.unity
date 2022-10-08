@@ -1806,3 +1806,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   inputField: {fileID: 376654548}
+  scoreText: {fileID: 1140670765}

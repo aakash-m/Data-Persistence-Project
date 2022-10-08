@@ -10,22 +10,16 @@ public class MenuUIHandler : MonoBehaviour
     [SerializeField] TMP_InputField inputField;
     [SerializeField] TextMeshProUGUI scoreText;
 
-    private void Start()
+    private void Awake()
     {
-        DataPersistence.Instance.LoadDataValue();
-        if (DataPersistence.Instance.GetPlayerScore() != 0)
-        {
-            scoreText.text = $"Best Score: {DataPersistence.Instance.GetPlayerScore()}";
-        }
-
-
+        var saveData = DataPersistence.Instance.LoadDataValue();
+        scoreText.text = $"High score {saveData.score} by {saveData.playerName}";
     }
 
     public void startNew()
     {
         SceneManager.LoadScene(1);
-        DataPersistence.Instance.SetPlayerName(inputField.text);
-        DataPersistence.Instance.SaveDataValues();
+        DataPersistence.Instance.playerName = inputField.text;
 
     }
 

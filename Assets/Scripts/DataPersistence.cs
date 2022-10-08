@@ -9,14 +9,15 @@ public class DataPersistence : MonoBehaviour
 {
     public static DataPersistence Instance;
 
-    private string playerName;
-    private int playerScore;
+    public string playerName { get; set; }
+    public int playerScore { get; set; }
 
     private void Awake()
     {
         if (Instance != null)
         {
             Destroy(gameObject);
+            LoadDataValue();
             return;
         }
 
@@ -25,27 +26,8 @@ public class DataPersistence : MonoBehaviour
 
     }
 
-    public string GetPlayerName()
-    {
-        return playerName;
-    }
-
-    public void SetPlayerName(string name)
-    {
-        playerName = name;
-    }
-
-    public void SetPlayerScore(int score)
-    {
-        playerScore = score;
-    }
-    public int GetPlayerScore()
-    {
-        return playerScore;
-    }
-
     [System.Serializable]
-    class SaveData
+    public class SaveData
     {
         public string playerName;
         public int score;
@@ -63,7 +45,7 @@ public class DataPersistence : MonoBehaviour
 
     }
 
-    public void LoadDataValue()
+    public SaveData LoadDataValue()
     {
         string filePath = Application.persistentDataPath + "/saveFile.json";
        
@@ -72,10 +54,11 @@ public class DataPersistence : MonoBehaviour
             string jsonString = File.ReadAllText(filePath);
             SaveData saveData = JsonUtility.FromJson<SaveData>(jsonString);
 
-            playerName = saveData.playerName;
-            playerScore = saveData.score;
+            return saveData;
 
         }
+
+        return null;
         
     }
 

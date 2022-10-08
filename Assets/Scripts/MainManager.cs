@@ -13,7 +13,6 @@ public class MainManager : MonoBehaviour
     public Text ScoreText;
     public Text BestScoreText;
     public GameObject GameOverText;
-    public string playerName;
 
     
     private bool m_Started = false;
@@ -21,7 +20,16 @@ public class MainManager : MonoBehaviour
     
     private bool m_GameOver = false;
 
-    
+
+    private void Awake()
+    {
+        if (DataPersistence.Instance)
+        {
+            var saveData = DataPersistence.Instance.LoadDataValue();
+
+        }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -39,9 +47,6 @@ public class MainManager : MonoBehaviour
                 brick.onDestroyed.AddListener(AddPoint);
             }
         }
-
-        DataPersistence.Instance.LoadDataValue();
-        playerName = DataPersistence.Instance.GetPlayerName();
     }
 
     private void Update()
@@ -80,16 +85,22 @@ public class MainManager : MonoBehaviour
         m_GameOver = true;
         GameOverText.SetActive(true);
 
-        DisplayBestScoreAndPlayerName();
+        DisplayBestScoreAndPlayerNameAndSave();
         DataPersistence.Instance.SaveDataValues();
     }
 
 
 
-    public void DisplayBestScoreAndPlayerName()
+    public void DisplayBestScoreAndPlayerNameAndSave()
     {
-        DataPersistence.Instance.LoadDataValue();
-        BestScoreText.text = $"Best Score : {DataPersistence.Instance.GetPlayerName()} : {m_Points}";
+        if (m_Points > DataPersistence.Instance.playerScore)
+        {
+            string savedPlayerName = DataPersistence.Instance.playerName;
+            BestScoreText.text = $"Congrats!! Best Score : {DataPersistence.Instance.playerName} : {m_Points}";
+            DataPersistence.Instance.playerScore = m_Points;
+        }
+        DataPersistence.Instance.SaveDataValues();
+        
     }
 
 
